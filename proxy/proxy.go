@@ -3,9 +3,11 @@ package proxy
 import (
 	"fmt"
 	"log/slog"
-	"main/proxy/certificates"
-	"main/proxy/config"
+
 	"net"
+
+	"github.com/tiredkangaroo/hat/proxy/certificates"
+	"github.com/tiredkangaroo/hat/proxy/config"
 
 	"github.com/valyala/fasthttp"
 )
@@ -18,11 +20,6 @@ type environment struct {
 var env *environment = &environment{}
 
 func initialize() error {
-	if err := config.Init(); err != nil {
-		return fmt.Errorf("initialize config: %w", err)
-	}
-	slog.Info("configuration initialized")
-
 	listener, err := net.Listen("tcp4", config.DefaultConfig.Addr)
 	if err != nil {
 		return fmt.Errorf("listen on %s: %w", config.DefaultConfig.Addr, err)

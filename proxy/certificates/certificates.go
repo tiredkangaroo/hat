@@ -9,12 +9,13 @@ import (
 	"crypto/x509/pkix"
 	"encoding/pem"
 	"fmt"
-	"main/proxy/config"
 	"math/big"
 	"net"
 	"os"
 	"sync"
 	"time"
+
+	"github.com/tiredkangaroo/hat/proxy/config"
 )
 
 type Service struct {
