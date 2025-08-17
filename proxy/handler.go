@@ -60,8 +60,15 @@ func handleMITM(host string, c net.Conn) error {
 	}
 	defer tlsConn.Close()
 
-	// we're not doing anything with the data yet, but it's here if needed in future
-	fasthttp.ServeConn(tlsConn)
+	// we're not doing anything special with the request, just proxying it for now
+	fasthttp.ServeConn(tlsConn, func(ctx *fasthttp.RequestCtx) {
+		if err := fasthttp.Do(&ctx.Request, &ctx.Response); err != nil {
+			slog.Error("perform request", "error", err)
+			ctx.SetStatusCode(fasthttp.StatusBadGateway)
+		}
+	})
+
+	return nil
 }
 
 func perform(req *fasthttp.Request, resp *fasthttp.Response) error {
