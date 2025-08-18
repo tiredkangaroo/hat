@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 type Command int
@@ -62,6 +63,7 @@ func runDebug() error {
 	if err != nil {
 		return err
 	}
+	configTOMLPath = strings.ReplaceAll(configTOMLPath, " ", "\\ ")
 	if err := os.MkdirAll(filepath.Dir(configTOMLPath), 0755); err != nil {
 		return fmt.Errorf("create config dir: %w", err)
 	}

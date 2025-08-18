@@ -37,11 +37,11 @@ func initialize() error {
 }
 
 func Start() error {
-	defer env.listener.Close()
-
 	if err := initialize(); err != nil {
 		return fmt.Errorf("initialize: %w", err)
 	}
+
+	defer env.listener.Close()
 
 	if err := fasthttp.Serve(env.listener, func(ctx *fasthttp.RequestCtx) {
 		var err error

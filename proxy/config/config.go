@@ -12,9 +12,9 @@ type Configuration struct {
 	Addr string `toml:"addr"`
 
 	MITM struct {
-		CertificateFile     string `toml:"certificate_file"`
-		KeyFile             string `toml:"key_file"`
-		CertificateLifetime int64  `toml:"certificate_lifetime"`
+		CertificateFile          string `toml:"certificate_file"`
+		KeyFile                  string `toml:"key_file"`
+		CertificateLifetimeHours int64  `toml:"certificate_lifetime_hours"`
 	} `toml:"mitm"`
 }
 

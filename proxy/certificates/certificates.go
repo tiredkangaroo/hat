@@ -97,7 +97,7 @@ func (c *Service) getTLSCert(host string) (tls.Certificate, error) {
 		},
 		DNSNames:              []string{host},
 		NotBefore:             time.Now().Add(-(time.Hour * 7200)),
-		NotAfter:              time.Now().Add(time.Hour * time.Duration(config.DefaultConfig.MITM.CertificateLifetime)),
+		NotAfter:              time.Now().Add(time.Hour * time.Duration(config.DefaultConfig.MITM.CertificateLifetimeHours)),
 		KeyUsage:              x509.KeyUsageDigitalSignature,
 		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth, x509.ExtKeyUsageClientAuth},
 		BasicConstraintsValid: true,
