@@ -16,6 +16,10 @@ type Configuration struct {
 		KeyFile                  string `toml:"key_file"`
 		CertificateLifetimeHours int64  `toml:"certificate_lifetime_hours"`
 	} `toml:"mitm"`
+
+	Database struct {
+		PostgresURL string `toml:"postgres_url"`
+	} `toml:"database"`
 }
 
 var DefaultConfig = &Configuration{}
@@ -45,7 +49,7 @@ func (c *Configuration) Init() error {
 		return fmt.Errorf("config file contains undecoded fields: %v", md.Undecoded())
 	}
 
-	if c.Addr == "" {
+	if c.Addr == "" || c.Database.PostgresURL == "" {
 		return fmt.Errorf("config file is missing some required fields")
 	}
 
