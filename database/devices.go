@@ -18,7 +18,7 @@ const (
 
 type Device struct {
 	ID        uuid.UUID
-	User      *User
+	User      User
 	Name      string
 	CreatedAt string
 }

@@ -23,6 +23,12 @@ type User struct {
 	HashedPassword string
 }
 
+func (db *DB) complete(u *User) error {
+	nu, err := db.GetUserByID(u.ID)
+	*u = *nu
+	return err
+}
+
 func (db *DB) GetUserByID(id uuid.UUID) (*User, error) {
 	row := db.conn.QueryRow(context.Background(), getUserByID, id)
 	var user User
