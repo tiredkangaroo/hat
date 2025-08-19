@@ -1,3 +1,5 @@
 *.build
 scripts/*.build
 config.toml
+*.crt
+*.key

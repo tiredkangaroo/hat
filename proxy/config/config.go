@@ -45,7 +45,7 @@ func (c *Configuration) Init() error {
 		return fmt.Errorf("config file contains undecoded fields: %v", md.Undecoded())
 	}
 
-	if c.Addr == "" || c.MITM.CertificateFile == "" || c.MITM.KeyFile == "" {
+	if c.Addr == "" {
 		return fmt.Errorf("config file is missing some required fields")
 	}
 

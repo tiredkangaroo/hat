@@ -146,9 +146,10 @@ func (c *Service) TLSConn(conn net.Conn, host string) (*tls.Conn, error) {
 	tlsConfig := &tls.Config{
 		PreferServerCipherSuites: true,
 		CurvePreferences:         []tls.CurveID{tls.X25519, tls.CurveP256},
-		MinVersion:               tls.VersionTLS10,
+		MinVersion:               tls.VersionTLS12,
 		MaxVersion:               tls.VersionTLS13,
 		Certificates:             []tls.Certificate{cert},
+		NextProtos:               []string{"http/1.1"},
 	}
 	return tls.Server(conn, tlsConfig), nil
 }
@@ -158,7 +159,7 @@ func (c *Service) TLSConn(conn net.Conn, host string) (*tls.Conn, error) {
 func GetService() (*Service, error) {
 	certService := &Service{}
 	if err := certService.Init(); err != nil {
-		return nil, fmt.Errorf("initialize certificate service: %w", err)
+		return certService, fmt.Errorf("initialize certificate service: %w", err)
 	}
 	return certService, nil
 }

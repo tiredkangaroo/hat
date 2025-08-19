@@ -11,25 +11,21 @@ import (
 )
 
 func handleHTTP(ctx *fasthttp.RequestCtx) error {
+	slog.Info("http proxy request", "method", ctx.Method(), "host", ctx.Host())
 	return perform(&ctx.Request, &ctx.Response)
 }
 
 func handleHTTPS(ctx *fasthttp.RequestCtx) error {
 	host := string(ctx.Host()) // string conversion because i do not want to mess with fasthttp memory management
+	ctx.SetStatusCode(fasthttp.StatusOK)
 	ctx.Hijack(func(c net.Conn) {
 		defer c.Close()
-
-		// send 200 ok response
-		okResp := []byte("HTTP/1.1 200 OK\r\n" + "Content-Length: 0\r\n\r\n")
-		if _, err := c.Write(okResp); err != nil {
-			slog.Error("write ok response", "error", err)
-			return
-		}
 
 		if env.certService.Enabled { // use mitm if enabled
 			handleMITM(host, c)
 			return
 		}
+		slog.Info("https tunnel request", "host", host)
 
 		hostConn, err := net.Dial("tcp", host) // connect to the target server
 		if err != nil {
@@ -62,6 +58,7 @@ func handleMITM(host string, c net.Conn) error {
 
 	// we're not doing anything special with the request, just proxying it for now
 	fasthttp.ServeConn(tlsConn, func(ctx *fasthttp.RequestCtx) {
+		slog.Info("https mitm proxy request", "method", ctx.Method(), "host", host)
 		if err := fasthttp.Do(&ctx.Request, &ctx.Response); err != nil {
 			slog.Error("perform request", "error", err)
 			ctx.SetStatusCode(fasthttp.StatusBadGateway)

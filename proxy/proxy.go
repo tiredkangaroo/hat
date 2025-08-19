@@ -28,7 +28,7 @@ func initialize() error {
 
 	certService, err := certificates.GetService()
 	if err != nil {
-		return fmt.Errorf("initialize certificate service: %w", err)
+		slog.Warn("certificate service could not be initialized", "error", err.Error())
 	}
 
 	env.listener = listener
